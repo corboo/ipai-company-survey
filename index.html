@@ -307,13 +307,13 @@
                 </div>
 
                 <div class="question">
-                    <div class="question-text">8. Biggest product/tech focus right now?</div>
-                    <div class="options" data-name="tech_focus">
-                        <label class="option"><input type="radio" name="tech_focus" value="Scaling content production"><span class="radio"></span><span class="option-text">Scaling content production (more volume)</span></label>
-                        <label class="option"><input type="radio" name="tech_focus" value="Improving content quality"><span class="radio"></span><span class="option-text">Improving content quality</span></label>
-                        <label class="option"><input type="radio" name="tech_focus" value="New content formats"><span class="radio"></span><span class="option-text">Launching new content formats</span></label>
-                        <label class="option"><input type="radio" name="tech_focus" value="Distribution/audience growth"><span class="radio"></span><span class="option-text">Distribution/audience growth</span></label>
-                        <label class="option"><input type="radio" name="tech_focus" value="Internal tools/automation"><span class="radio"></span><span class="option-text">Internal tools/automation</span></label>
+                    <div class="question-text">8. Biggest product/tech focus right now? (select all that apply)</div>
+                    <div class="options" data-name="tech_focus" data-multi="true">
+                        <label class="option"><input type="checkbox" name="tech_focus" value="Scaling content production"><span class="checkbox"></span><span class="option-text">Scaling content production (more volume)</span></label>
+                        <label class="option"><input type="checkbox" name="tech_focus" value="Improving content quality"><span class="checkbox"></span><span class="option-text">Improving content quality</span></label>
+                        <label class="option"><input type="checkbox" name="tech_focus" value="New content formats"><span class="checkbox"></span><span class="option-text">Launching new content formats</span></label>
+                        <label class="option"><input type="checkbox" name="tech_focus" value="Distribution/audience growth"><span class="checkbox"></span><span class="option-text">Distribution/audience growth</span></label>
+                        <label class="option"><input type="checkbox" name="tech_focus" value="Internal tools/automation"><span class="checkbox"></span><span class="option-text">Internal tools/automation</span></label>
                     </div>
                 </div>
             </div>
@@ -497,7 +497,7 @@
             
             summary += `**Product & Content**\n`;
             summary += `• Formats: ${Array.isArray(results.content_formats) ? results.content_formats.join(', ') : results.content_formats || 'Not specified'}\n`;
-            summary += `• Tech Focus: ${results.tech_focus || 'Not specified'}\n\n`;
+            summary += `• Tech Focus: ${Array.isArray(results.tech_focus) ? results.tech_focus.join(', ') : results.tech_focus || 'Not specified'}\n\n`;
             
             summary += `**Stakeholders**\n`;
             summary += `• Board: ${results.board || 'Not specified'}\n`;
