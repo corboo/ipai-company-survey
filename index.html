@@ -360,13 +360,13 @@
                 <div class="section-title">🎯 Your Priorities as CEO</div>
                 
                 <div class="question">
-                    <div class="question-text">12. Where do you spend most of your time today?</div>
-                    <div class="options" data-name="time_spent">
-                        <label class="option"><input type="radio" name="time_spent" value="Fundraising/investor relations"><span class="radio"></span><span class="option-text">Fundraising/investor relations</span></label>
-                        <label class="option"><input type="radio" name="time_spent" value="Sales/partnerships"><span class="radio"></span><span class="option-text">Sales/partnerships</span></label>
-                        <label class="option"><input type="radio" name="time_spent" value="Product/strategy"><span class="radio"></span><span class="option-text">Product/strategy</span></label>
-                        <label class="option"><input type="radio" name="time_spent" value="Team/operations"><span class="radio"></span><span class="option-text">Team/operations</span></label>
-                        <label class="option"><input type="radio" name="time_spent" value="Everything equally (too spread thin)"><span class="radio"></span><span class="option-text">Everything equally (too spread thin)</span></label>
+                    <div class="question-text">12. Where do you spend most of your time today? (select all that apply)</div>
+                    <div class="options" data-name="time_spent" data-multi="true">
+                        <label class="option"><input type="checkbox" name="time_spent" value="Fundraising/investor relations"><span class="checkbox"></span><span class="option-text">Fundraising/investor relations</span></label>
+                        <label class="option"><input type="checkbox" name="time_spent" value="Sales/partnerships"><span class="checkbox"></span><span class="option-text">Sales/partnerships</span></label>
+                        <label class="option"><input type="checkbox" name="time_spent" value="Product/strategy"><span class="checkbox"></span><span class="option-text">Product/strategy</span></label>
+                        <label class="option"><input type="checkbox" name="time_spent" value="Team/operations"><span class="checkbox"></span><span class="option-text">Team/operations</span></label>
+                        <label class="option"><input type="checkbox" name="time_spent" value="Everything equally (too spread thin)"><span class="checkbox"></span><span class="option-text">Everything equally (too spread thin)</span></label>
                     </div>
                 </div>
 
@@ -505,7 +505,7 @@
             summary += `• Key Relationships: ${Array.isArray(results.external_relationships) ? results.external_relationships.join(', ') : results.external_relationships || 'Not specified'}\n\n`;
             
             summary += `**CEO Priorities**\n`;
-            summary += `• Time Spent: ${results.time_spent || 'Not specified'}\n`;
+            summary += `• Time Spent: ${Array.isArray(results.time_spent) ? results.time_spent.join(', ') : results.time_spent || 'Not specified'}\n`;
             summary += `• Want More Time: ${results.want_time || 'Not specified'}\n`;
             summary += `• Biggest Challenge: ${results.challenge || 'Not specified'}\n`;
             summary += `• 12-Month Goal: ${results.goal_12mo || 'Not specified'}\n\n`;
