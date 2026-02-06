@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inception Point AI - Company Context Survey</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .subtitle {
+            color: #888;
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #4fc3f7;
+        }
+        .question {
+            margin-bottom: 24px;
+        }
+        .question:last-child {
+            margin-bottom: 0;
+        }
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background: rgba(79, 195, 247, 0.1);
+            border-color: rgba(79, 195, 247, 0.3);
+        }
+        .option.selected {
+            background: rgba(79, 195, 247, 0.15);
+            border-color: #4fc3f7;
+        }
+        .option input {
+            display: none;
+        }
+        .option .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .option.selected .radio {
+            border-color: #4fc3f7;
+        }
+        .option.selected .radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #4fc3f7;
+            border-radius: 50%;
+        }
+        .option .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .option.selected .checkbox {
+            border-color: #4fc3f7;
+            background: #4fc3f7;
+        }
+        .option.selected .checkbox::after {
+            content: '✓';
+            color: #1a1a2e;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .option-text {
+            font-size: 14px;
+            color: #ccc;
+        }
+        .option.selected .option-text {
+            color: #fff;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #4fc3f7;
+        }
+        textarea::placeholder {
+            color: #666;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 195, 247, 0.4);
+        }
+        .results {
+            display: none;
+            background: rgba(79, 195, 247, 0.1);
+            border: 1px solid #4fc3f7;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .results h2 {
+            margin-bottom: 16px;
+            color: #4fc3f7;
+        }
+        .results pre {
+            background: rgba(0,0,0,0.3);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .copy-btn {
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #4fc3f7;
+            transition: width 0.3s;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+    <div class="container">
+        <h1>⚡ Company Context Survey</h1>
+        <p class="subtitle">Help me understand Inception Point AI so I can better assist you</p>
+
+        <form id="survey">
+            <!-- SECTION 1: Company Basics -->
+            <div class="section">
+                <div class="section-title">📊 Company Stage & Structure</div>
+                
+                <div class="question">
+                    <div class="question-text">1. Current company stage?</div>
+                    <div class="options" data-name="stage">
+                        <label class="option"><input type="radio" name="stage" value="Pre-seed"><span class="radio"></span><span class="option-text">Pre-seed</span></label>
+                        <label class="option"><input type="radio" name="stage" value="Seed (just raised)"><span class="radio"></span><span class="option-text">Seed (just raised)</span></label>
+                        <label class="option"><input type="radio" name="stage" value="Seed (runway 12+ months)"><span class="radio"></span><span class="option-text">Seed (runway 12+ months)</span></label>
+                        <label class="option"><input type="radio" name="stage" value="Series A"><span class="radio"></span><span class="option-text">Series A</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">2. Current team size?</div>
+                    <div class="options" data-name="team_size">
+                        <label class="option"><input type="radio" name="team_size" value="1-5"><span class="radio"></span><span class="option-text">1-5 people</span></label>
+                        <label class="option"><input type="radio" name="team_size" value="6-10"><span class="radio"></span><span class="option-text">6-10 people</span></label>
+                        <label class="option"><input type="radio" name="team_size" value="11-20"><span class="radio"></span><span class="option-text">11-20 people</span></label>
+                        <label class="option"><input type="radio" name="team_size" value="21-50"><span class="radio"></span><span class="option-text">21-50 people</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">3. Team structure? (select all that apply)</div>
+                    <div class="options" data-name="team_structure" data-multi="true">
+                        <label class="option"><input type="checkbox" name="team_structure" value="All co-founders"><span class="checkbox"></span><span class="option-text">All co-founders</span></label>
+                        <label class="option"><input type="checkbox" name="team_structure" value="Full-time employees"><span class="checkbox"></span><span class="option-text">Full-time employees</span></label>
+                        <label class="option"><input type="checkbox" name="team_structure" value="Part-time/fractional"><span class="checkbox"></span><span class="option-text">Part-time/fractional</span></label>
+                        <label class="option"><input type="checkbox" name="team_structure" value="Contractors/freelancers"><span class="checkbox"></span><span class="option-text">Contractors/freelancers</span></label>
+                        <label class="option"><input type="checkbox" name="team_structure" value="Agency partners"><span class="checkbox"></span><span class="option-text">Agency partners</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Business Model -->
+            <div class="section">
+                <div class="section-title">💰 Business Model & Revenue</div>
+                
+                <div class="question">
+                    <div class="question-text">4. Primary business model?</div>
+                    <div class="options" data-name="business_model">
+                        <label class="option"><input type="radio" name="business_model" value="Advertising/CPM"><span class="radio"></span><span class="option-text">Advertising/CPM (ad-supported content)</span></label>
+                        <label class="option"><input type="radio" name="business_model" value="Licensing/syndication"><span class="radio"></span><span class="option-text">Licensing/syndication (selling content to platforms)</span></label>
+                        <label class="option"><input type="radio" name="business_model" value="B2B SaaS/services"><span class="radio"></span><span class="option-text">B2B SaaS/services (selling tools to businesses)</span></label>
+                        <label class="option"><input type="radio" name="business_model" value="Direct-to-consumer"><span class="radio"></span><span class="option-text">Direct-to-consumer (subscriptions, purchases)</span></label>
+                        <label class="option"><input type="radio" name="business_model" value="Multiple/hybrid"><span class="radio"></span><span class="option-text">Multiple/hybrid model</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">5. Current revenue stage?</div>
+                    <div class="options" data-name="revenue_stage">
+                        <label class="option"><input type="radio" name="revenue_stage" value="Pre-revenue"><span class="radio"></span><span class="option-text">Pre-revenue</span></label>
+                        <label class="option"><input type="radio" name="revenue_stage" value="Early revenue (<$100K ARR)"><span class="radio"></span><span class="option-text">Early revenue (&lt;$100K ARR)</span></label>
+                        <label class="option"><input type="radio" name="revenue_stage" value="Growing ($100K-$500K ARR)"><span class="radio"></span><span class="option-text">Growing ($100K-$500K ARR)</span></label>
+                        <label class="option"><input type="radio" name="revenue_stage" value="Scaling ($500K-$1M ARR)"><span class="radio"></span><span class="option-text">Scaling ($500K-$1M ARR)</span></label>
+                        <label class="option"><input type="radio" name="revenue_stage" value="$1M+ ARR"><span class="radio"></span><span class="option-text">$1M+ ARR</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">6. Top revenue priority for next 6 months?</div>
+                    <div class="options" data-name="revenue_priority">
+                        <label class="option"><input type="radio" name="revenue_priority" value="Close first major deals"><span class="radio"></span><span class="option-text">Close first major deals</span></label>
+                        <label class="option"><input type="radio" name="revenue_priority" value="Grow existing revenue streams"><span class="radio"></span><span class="option-text">Grow existing revenue streams</span></label>
+                        <label class="option"><input type="radio" name="revenue_priority" value="Launch new revenue streams"><span class="radio"></span><span class="option-text">Launch new revenue streams</span></label>
+                        <label class="option"><input type="radio" name="revenue_priority" value="Focus on product, revenue secondary"><span class="radio"></span><span class="option-text">Focus on product, revenue secondary</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Product & Content -->
+            <div class="section">
+                <div class="section-title">🎯 Product & Content</div>
+                
+                <div class="question">
+                    <div class="question-text">7. Primary content formats today? (select all that apply)</div>
+                    <div class="options" data-name="content_formats" data-multi="true">
+                        <label class="option"><input type="checkbox" name="content_formats" value="Podcasts"><span class="checkbox"></span><span class="option-text">Podcasts</span></label>
+                        <label class="option"><input type="checkbox" name="content_formats" value="Short-form video (TikTok, Reels, Shorts)"><span class="checkbox"></span><span class="option-text">Short-form video (TikTok, Reels, Shorts)</span></label>
+                        <label class="option"><input type="checkbox" name="content_formats" value="Long-form video (YouTube)"><span class="checkbox"></span><span class="option-text">Long-form video (YouTube)</span></label>
+                        <label class="option"><input type="checkbox" name="content_formats" value="Written (books, articles)"><span class="checkbox"></span><span class="option-text">Written (books, articles)</span></label>
+                        <label class="option"><input type="checkbox" name="content_formats" value="Live/interactive"><span class="checkbox"></span><span class="option-text">Live/interactive</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">8. Biggest product/tech focus right now?</div>
+                    <div class="options" data-name="tech_focus">
+                        <label class="option"><input type="radio" name="tech_focus" value="Scaling content production"><span class="radio"></span><span class="option-text">Scaling content production (more volume)</span></label>
+                        <label class="option"><input type="radio" name="tech_focus" value="Improving content quality"><span class="radio"></span><span class="option-text">Improving content quality</span></label>
+                        <label class="option"><input type="radio" name="tech_focus" value="New content formats"><span class="radio"></span><span class="option-text">Launching new content formats</span></label>
+                        <label class="option"><input type="radio" name="tech_focus" value="Distribution/audience growth"><span class="radio"></span><span class="option-text">Distribution/audience growth</span></label>
+                        <label class="option"><input type="radio" name="tech_focus" value="Internal tools/automation"><span class="radio"></span><span class="option-text">Internal tools/automation</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: Stakeholders -->
+            <div class="section">
+                <div class="section-title">👥 Key Stakeholders</div>
+                
+                <div class="question">
+                    <div class="question-text">9. Board structure?</div>
+                    <div class="options" data-name="board">
+                        <label class="option"><input type="radio" name="board" value="No formal board yet"><span class="radio"></span><span class="option-text">No formal board yet</span></label>
+                        <label class="option"><input type="radio" name="board" value="Founders only"><span class="radio"></span><span class="option-text">Founders only</span></label>
+                        <label class="option"><input type="radio" name="board" value="Founders + investors"><span class="radio"></span><span class="option-text">Founders + investor board seats</span></label>
+                        <label class="option"><input type="radio" name="board" value="Founders + investors + independents"><span class="radio"></span><span class="option-text">Founders + investors + independent members</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">10. Investor communication cadence?</div>
+                    <div class="options" data-name="investor_cadence">
+                        <label class="option"><input type="radio" name="investor_cadence" value="Monthly updates"><span class="radio"></span><span class="option-text">Monthly updates</span></label>
+                        <label class="option"><input type="radio" name="investor_cadence" value="Quarterly updates"><span class="radio"></span><span class="option-text">Quarterly updates</span></label>
+                        <label class="option"><input type="radio" name="investor_cadence" value="Ad-hoc only"><span class="radio"></span><span class="option-text">Ad-hoc only</span></label>
+                        <label class="option"><input type="radio" name="investor_cadence" value="Still figuring it out"><span class="radio"></span><span class="option-text">Still figuring it out</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">11. Key external relationships to manage? (select all that apply)</div>
+                    <div class="options" data-name="external_relationships" data-multi="true">
+                        <label class="option"><input type="checkbox" name="external_relationships" value="Investors (Activate, eLab)"><span class="checkbox"></span><span class="option-text">Investors (Activate, eLab)</span></label>
+                        <label class="option"><input type="checkbox" name="external_relationships" value="Distribution partners (Triton, platforms)"><span class="checkbox"></span><span class="option-text">Distribution partners (Triton, platforms)</span></label>
+                        <label class="option"><input type="checkbox" name="external_relationships" value="Potential acquirers/strategic partners"><span class="checkbox"></span><span class="option-text">Potential acquirers/strategic partners</span></label>
+                        <label class="option"><input type="checkbox" name="external_relationships" value="Press/media"><span class="checkbox"></span><span class="option-text">Press/media</span></label>
+                        <label class="option"><input type="checkbox" name="external_relationships" value="Advisors/mentors"><span class="checkbox"></span><span class="option-text">Advisors/mentors</span></label>
+                        <label class="option"><input type="checkbox" name="external_relationships" value="Vendors/agencies"><span class="checkbox"></span><span class="option-text">Vendors/agencies</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: CEO Priorities -->
+            <div class="section">
+                <div class="section-title">🎯 Your Priorities as CEO</div>
+                
+                <div class="question">
+                    <div class="question-text">12. Where do you spend most of your time today?</div>
+                    <div class="options" data-name="time_spent">
+                        <label class="option"><input type="radio" name="time_spent" value="Fundraising/investor relations"><span class="radio"></span><span class="option-text">Fundraising/investor relations</span></label>
+                        <label class="option"><input type="radio" name="time_spent" value="Sales/partnerships"><span class="radio"></span><span class="option-text">Sales/partnerships</span></label>
+                        <label class="option"><input type="radio" name="time_spent" value="Product/strategy"><span class="radio"></span><span class="option-text">Product/strategy</span></label>
+                        <label class="option"><input type="radio" name="time_spent" value="Team/operations"><span class="radio"></span><span class="option-text">Team/operations</span></label>
+                        <label class="option"><input type="radio" name="time_spent" value="Everything equally (too spread thin)"><span class="radio"></span><span class="option-text">Everything equally (too spread thin)</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">13. Where do you WANT to spend more time?</div>
+                    <div class="options" data-name="want_time">
+                        <label class="option"><input type="radio" name="want_time" value="Strategy/vision"><span class="radio"></span><span class="option-text">Strategy/vision</span></label>
+                        <label class="option"><input type="radio" name="want_time" value="Key relationships (investors, partners)"><span class="radio"></span><span class="option-text">Key relationships (investors, partners)</span></label>
+                        <label class="option"><input type="radio" name="want_time" value="Product/creative"><span class="radio"></span><span class="option-text">Product/creative</span></label>
+                        <label class="option"><input type="radio" name="want_time" value="Team development"><span class="radio"></span><span class="option-text">Team development</span></label>
+                        <label class="option"><input type="radio" name="want_time" value="Sales/revenue"><span class="radio"></span><span class="option-text">Sales/revenue</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">14. Biggest bottleneck/challenge right now?</div>
+                    <div class="options" data-name="challenge">
+                        <label class="option"><input type="radio" name="challenge" value="Hiring key roles"><span class="radio"></span><span class="option-text">Hiring key roles</span></label>
+                        <label class="option"><input type="radio" name="challenge" value="Closing deals/revenue"><span class="radio"></span><span class="option-text">Closing deals/revenue</span></label>
+                        <label class="option"><input type="radio" name="challenge" value="Product/tech capacity"><span class="radio"></span><span class="option-text">Product/tech capacity</span></label>
+                        <label class="option"><input type="radio" name="challenge" value="Time management/bandwidth"><span class="radio"></span><span class="option-text">Time management/bandwidth</span></label>
+                        <label class="option"><input type="radio" name="challenge" value="Defining strategy/focus"><span class="radio"></span><span class="option-text">Defining strategy/focus</span></label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">15. Company goal for next 12 months?</div>
+                    <div class="options" data-name="goal_12mo">
+                        <label class="option"><input type="radio" name="goal_12mo" value="Raise Series A"><span class="radio"></span><span class="option-text">Raise Series A</span></label>
+                        <label class="option"><input type="radio" name="goal_12mo" value="Hit revenue milestone"><span class="radio"></span><span class="option-text">Hit specific revenue milestone</span></label>
+                        <label class="option"><input type="radio" name="goal_12mo" value="Launch new product/format"><span class="radio"></span><span class="option-text">Launch new product/format</span></label>
+                        <label class="option"><input type="radio" name="goal_12mo" value="Build team"><span class="radio"></span><span class="option-text">Build out the team</span></label>
+                        <label class="option"><input type="radio" name="goal_12mo" value="Strategic partnership or exit"><span class="radio"></span><span class="option-text">Land major strategic partnership or exit</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: Open-ended -->
+            <div class="section">
+                <div class="section-title">💬 Anything Else</div>
+                
+                <div class="question">
+                    <div class="question-text">16. Anything else I should know about the company or your priorities?</div>
+                    <textarea name="anything_else" placeholder="Optional - any context that would help me assist you better..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Generate Summary ⚡</button>
+        </form>
+
+        <div class="results" id="results">
+            <h2>✅ Survey Complete</h2>
+            <p style="margin-bottom: 16px; color: #ccc;">Copy this summary and paste it back to me in Slack:</p>
+            <pre id="summary"></pre>
+            <button class="copy-btn" onclick="copyResults()">📋 Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        // Handle option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                const input = this.querySelector('input');
+                const isMulti = this.closest('.options').dataset.multi === 'true';
+                
+                if (isMulti) {
+                    this.classList.toggle('selected');
+                    input.checked = this.classList.contains('selected');
+                } else {
+                    this.closest('.options').querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    input.checked = true;
+                }
+                updateProgress();
+            });
+        });
+
+        // Update progress bar
+        function updateProgress() {
+            const questions = document.querySelectorAll('.question');
+            let answered = 0;
+            questions.forEach(q => {
+                const hasChecked = q.querySelector('input:checked') || (q.querySelector('textarea') && q.querySelector('textarea').value.trim());
+                if (hasChecked) answered++;
+            });
+            const progress = (answered / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        // Handle form submission
+        document.getElementById('survey').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const results = {};
+            
+            // Process form data
+            for (let [key, value] of formData.entries()) {
+                if (results[key]) {
+                    if (Array.isArray(results[key])) {
+                        results[key].push(value);
+                    } else {
+                        results[key] = [results[key], value];
+                    }
+                } else {
+                    results[key] = value;
+                }
+            }
+
+            // Build summary
+            let summary = `**INCEPTION POINT AI - COMPANY CONTEXT**\n\n`;
+            summary += `**Stage & Structure**\n`;
+            summary += `• Stage: ${results.stage || 'Not specified'}\n`;
+            summary += `• Team Size: ${results.team_size || 'Not specified'}\n`;
+            summary += `• Structure: ${Array.isArray(results.team_structure) ? results.team_structure.join(', ') : results.team_structure || 'Not specified'}\n\n`;
+            
+            summary += `**Business Model & Revenue**\n`;
+            summary += `• Model: ${results.business_model || 'Not specified'}\n`;
+            summary += `• Revenue Stage: ${results.revenue_stage || 'Not specified'}\n`;
+            summary += `• Priority: ${results.revenue_priority || 'Not specified'}\n\n`;
+            
+            summary += `**Product & Content**\n`;
+            summary += `• Formats: ${Array.isArray(results.content_formats) ? results.content_formats.join(', ') : results.content_formats || 'Not specified'}\n`;
+            summary += `• Tech Focus: ${results.tech_focus || 'Not specified'}\n\n`;
+            
+            summary += `**Stakeholders**\n`;
+            summary += `• Board: ${results.board || 'Not specified'}\n`;
+            summary += `• Investor Cadence: ${results.investor_cadence || 'Not specified'}\n`;
+            summary += `• Key Relationships: ${Array.isArray(results.external_relationships) ? results.external_relationships.join(', ') : results.external_relationships || 'Not specified'}\n\n`;
+            
+            summary += `**CEO Priorities**\n`;
+            summary += `• Time Spent: ${results.time_spent || 'Not specified'}\n`;
+            summary += `• Want More Time: ${results.want_time || 'Not specified'}\n`;
+            summary += `• Biggest Challenge: ${results.challenge || 'Not specified'}\n`;
+            summary += `• 12-Month Goal: ${results.goal_12mo || 'Not specified'}\n\n`;
+            
+            if (results.anything_else) {
+                summary += `**Additional Context**\n${results.anything_else}\n`;
+            }
+
+            document.getElementById('summary').textContent = summary;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function copyResults() {
+            const summary = document.getElementById('summary').textContent;
+            navigator.clipboard.writeText(summary).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => btn.textContent = '📋 Copy to Clipboard', 2000);
+            });
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
